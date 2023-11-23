@@ -29,7 +29,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Farmasty / Recetas</string>
+   <string>Farmasty / Historial</string>
   </property>
   <property name="styleSheet">
    <string notr="true">background:&quot;#222&quot;; color: &quot;#eee&quot;</string>
@@ -38,7 +38,7 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>10</x>
       <y>10</y>
       <width>700</width>
       <height>30</height>
@@ -66,25 +66,25 @@
      <string>Historial de Ventas</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="volver_menu_btn">
+   <widget class="QPushButton" name="menu_btn">
     <property name="geometry">
      <rect>
-      <x>790</x>
+      <x>740</x>
       <y>10</y>
-      <width>100</width>
-      <height>25</height>
+      <width>150</width>
+      <height>34</height>
      </rect>
     </property>
     <property name="minimumSize">
      <size>
-      <width>100</width>
-      <height>25</height>
+      <width>150</width>
+      <height>34</height>
      </size>
     </property>
     <property name="maximumSize">
      <size>
-      <width>100</width>
-      <height>25</height>
+      <width>150</width>
+      <height>34</height>
      </size>
     </property>
     <property name="font">
@@ -98,7 +98,8 @@
      <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color:#ccd1d1; color: #222; border-radius: 8px</string>
+     <string notr="true">background-color:#ccd1d1; color: #222; border-radius: 8px;
+padding: 4px</string>
     </property>
     <property name="text">
      <string>Menú</string>
@@ -107,11 +108,23 @@
    <widget class="QTableWidget" name="historialventas">
     <property name="geometry">
      <rect>
-      <x>15</x>
+      <x>10</x>
       <y>51</y>
-      <width>871</width>
-      <height>531</height>
+      <width>880</width>
+      <height>580</height>
      </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>880</width>
+      <height>580</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>880</width>
+      <height>580</height>
+     </size>
     </property>
     <property name="font">
      <font>
@@ -127,46 +140,6 @@
     <attribute name="horizontalHeaderDefaultSectionSize">
      <number>200</number>
     </attribute>
-    <row>
-     <property name="text">
-      <string>New Row</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>New Row</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>New Row</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>New Row</string>
-     </property>
-    </row>
-    <column>
-     <property name="text">
-      <string>Producto</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Cantidad</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Descuento</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Valor</string>
-     </property>
-    </column>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -175,7 +148,7 @@
      <x>0</x>
      <y>0</y>
      <width>900</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>

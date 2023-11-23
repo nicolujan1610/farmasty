@@ -40,7 +40,7 @@ class LoginVentana(QMainWindow):
       login_win.error.setVisible(True)
 
   def iniciar_sesion(self, usuario):
-    menu_win.bienvenido_lbl.setText(f"Bienvenido, {usuario}")
+    menu_win.bienvenido_lbl.setText(f"Bienvenido, {usuario}!")
     menu_win.show()
     self.hide()
 
@@ -53,6 +53,11 @@ class MenuVentana(QMainWindow):
     self.recetas_btn.clicked.connect(self.ir_a_recetas)
     self.nueva_venta_btn.clicked.connect(self.ir_a_venta)
     self.inventario_btn.clicked.connect(self.ir_a_inventario)
+    self.historial_ventas_btn.clicked.connect(self.ir_a_historial)
+
+  def ir_a_historial(self):
+    self.hide()
+    historial_win.show()
 
   def ir_a_inventario(self):
     self.hide()
@@ -117,6 +122,7 @@ class RecetasVentana(QMainWindow):
     self.quitar_btn.clicked.connect(self.quitar_fila_clicked)
     self.warning_lbl.setVisible(False)
 
+    self.datos_a_cargar = []
     # Config de la tabla
     self.recetas_table.setRowCount(0)
     self.recetas_table.setColumnCount(6)
@@ -125,11 +131,10 @@ class RecetasVentana(QMainWindow):
   def showEvent(self, event):
     # Este método se llama cuando la ventana se muestra
     super(RecetasVentana, self).showEvent(event)
-    print('La ventana está visible para el usuario')
     self.completar_tabla_csv()
     
   def completar_tabla_csv(self):
-    with open('recetas/recetas.csv') as f:
+    with open('recetas/recetas.csv', 'r') as f:
       reader = csv.reader(f, delimiter="|")
       for row in reader:
         paciente = row[0]
@@ -142,6 +147,13 @@ class RecetasVentana(QMainWindow):
         self.cargar_receta(datosLista)
 
     agregar_receta_win.error_lbl.setVisible(False)
+
+  def cargar_row_in_csv(self, dato):
+    self.datos_a_cargar.append(dato)
+
+    with open('recetas/recetas.csv', 'w') as file:
+      writer = csv.writer(file, delimiter='|')
+      writer.writerow(dato)
 
   def quitar_fila_clicked(self):
     elementos_seleccionados = self.recetas_table.selectedItems()
@@ -180,11 +192,11 @@ class RecetasVentana(QMainWindow):
   def cargar_receta(self, datos):
     contador = 0
     filasActuales = self.recetas_table.rowCount()
-    print(f"Filas actuales: {filasActuales}")
     self.recetas_table.insertRow(filasActuales)
     for dato in datos:
       self.recetas_table.setItem(filasActuales, contador, QTableWidgetItem(dato))
       contador += 1
+
     agregar_receta_win.cancelar_receta()
 
 # ||--------Agg Receta--------||
@@ -229,6 +241,7 @@ class AgregarRecetaWidget(QWidget):
     
     if contador == 6:
       receta_win.cargar_receta(datosLista)
+      receta_win.cargar_row_in_csv(datosLista)
       self.error_lbl.setVisible(False)
     else:
       self.error_lbl.setVisible(True)
@@ -243,6 +256,47 @@ class InventarioVentana(QMainWindow):
     self.inventario_table.setRowCount(0)
     self.inventario_table.setColumnCount(4)
     self.inventario_table.setHorizontalHeaderLabels(('Producto', 'Categoria', 'Precio', 'Cantidad'))
+    self.agg_btn.clicked.connect(self.ir_a_agregar_producto)
+    self.del_btn.clicked.connect(self.quitar_fila_inventario)
+    self.warning_lbl.setVisible(False)
+
+  def quitar_fila_inventario(self):
+    elementos_seleccionados = self.inventario_table.selectedItems()
+
+    if elementos_seleccionados:
+      self.warning_lbl.setVisible(False)
+      # Obtener la fila de un elemento seleccionado (asumiendo que es una selección por fila)
+      fila_seleccionada = elementos_seleccionados[0].row()
+
+      # Crear cartel de advertencia
+      self.quitar_confirmacion = QMessageBox()
+      self.quitar_confirmacion.setIcon(QMessageBox.Icon.Warning)
+      buttons = (QMessageBox.StandardButton.No)
+      buttons |= QMessageBox.StandardButton.Yes
+      self.quitar_confirmacion.setStandardButtons(buttons)
+      self.quitar_confirmacion.setWindowTitle("Eliminar Producto")
+      self.quitar_confirmacion.setText("¿Desea eliminar por completo el producto?")
+      self.quitar_confirmacion.exec()
+
+      if self.quitar_confirmacion.clickedButton().text() == '&Yes':
+          # Eliminar la fila seleccionada
+          self.inventario_table.removeRow(fila_seleccionada)
+
+    else:
+      # Crear la advertencia de ningun elemento seleccionado.
+      self.warning_lbl.setVisible(True)
+
+  def cargar_producto(self, datos):
+    contador = 0
+    filasActuales = self.inventario_table.rowCount()
+    self.inventario_table.insertRow(filasActuales)
+    for dato in datos:
+      self.inventario_table.setItem(filasActuales, contador, QTableWidgetItem(dato))
+      contador += 1
+    agregar_stock_win.hide()
+
+  def ir_a_agregar_producto(self):
+    agregar_stock_win.show()
 
   def showEvent(self, event):
     # Este método se llama cuando la ventana se muestra
@@ -269,7 +323,44 @@ class InventarioVentana(QMainWindow):
     self.hide()
     menu_win.show()
     
+# ||--------Agg a Stock--------||
+class AgregarStockVentana(QWidget):
+  def __init__(self):
+    super().__init__()
+    uic.loadUi('./inventario/agregar-stock-ventana.ui',self)
+    self.agg_btn.clicked.connect(self.cargar_inventario)
+    self.error_lbl.setVisible(False)
 
+  def cargar_inventario(self):
+    producto = self.producto_input.text()
+    categoria = self.categoria_input.text()
+    precio = self.precio_input.text()
+    cantidad = self.cantidad_input.text()
+    
+    datosLista = [producto, categoria, precio, cantidad]
+
+    contador = 0
+    for dato in datosLista:
+      if dato != "":
+        contador += 1
+    
+    if contador == 4:
+      inventario_win.cargar_producto(datosLista)
+      self.error_lbl.setVisible(False)
+    else:
+      self.error_lbl.setVisible(True)
+    
+# ------------------Ventana Historial------------------
+class HistorialVentasVentana(QMainWindow):
+  def __init__(self):
+    super().__init__()
+    uic.loadUi('historial/historial-ventana.ui',self)
+    self.menu_btn.clicked.connect(self.ir_a_menu)
+
+  def ir_a_menu(self):
+    self.hide()
+    menu_win.show()
+    
 app = QApplication([])
 agregar_receta_win = AgregarRecetaWidget()
 receta_win = RecetasVentana()
@@ -278,6 +369,8 @@ login_win = LoginVentana()
 nueva_venta_win = NuevaVentaVentana()
 agregar_producto_win = AgregarProductoVentana()
 inventario_win = InventarioVentana()
+agregar_stock_win = AgregarStockVentana()
+historial_win = HistorialVentasVentana()
 
 login_win.show()
 app.exec()
