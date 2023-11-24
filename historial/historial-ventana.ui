@@ -105,7 +105,7 @@ padding: 4px</string>
      <string>Menú</string>
     </property>
    </widget>
-   <widget class="QTableWidget" name="historialventas">
+   <widget class="QTableWidget" name="historial_table">
     <property name="geometry">
      <rect>
       <x>10</x>

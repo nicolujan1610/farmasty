@@ -54,6 +54,7 @@ class MenuVentana(QMainWindow):
     self.historial_ventas_btn.clicked.connect(self.ir_a_historial)
 
   def ir_a_historial(self):
+    historial_win.leer_csv()
     self.hide()
     historial_win.show()
 
@@ -177,10 +178,20 @@ class FinalizarVentaVentana(QMainWindow):
         con_descuento = 'No'
       
       metodo_de_pago = self.metodo_pago_cb.currentText()
+      detalles_de_venta_actual = [total, prods_vendidos, metodo_de_pago, con_descuento]
+      lista_completa = [detalles_de_venta_actual]
 
-      detalles_de_venta = [total, prods_vendidos, metodo_de_pago, con_descuento]
-
-      df = pd.DataFrame([detalles_de_venta])
+      with open('historial/historial.csv', "r", encoding='utf-8') as f:
+        reader = csv.reader(f, delimiter="|")
+        for row in reader:
+          total_venta = row[0]
+          prods_vendidos = row[1]
+          metodo_de_pago = row[2]
+          obra_social = row[3]
+          datosLista = [total_venta, prods_vendidos, metodo_de_pago, obra_social]
+          lista_completa.append(datosLista)
+        
+      df = pd.DataFrame(lista_completa)
       # Guardar el DataFrame en el archivo CSV, sobrescribiendo completamente el archivo
       df.to_csv('historial/historial.csv', index=False, header=False, sep='|')
       
@@ -508,6 +519,33 @@ class HistorialVentasVentana(QMainWindow):
     super().__init__()
     uic.loadUi('historial/historial-ventana.ui',self)
     self.menu_btn.clicked.connect(self.ir_a_menu)
+     # Config de la tabla
+    self.historial_table.setRowCount(0)
+    self.historial_table.setColumnCount(4)
+    self.historial_table.setHorizontalHeaderLabels(('Total', 'Cantidad de productos', 'Metodo de pago', 'Obra Social'))
+
+    self.leer_csv()
+
+  def leer_csv(self):
+    self.historial_table.setRowCount(0)
+    
+    with open('historial/historial.csv', "r", encoding='utf-8') as f:
+      reader = csv.reader(f, delimiter="|")
+      for row in reader:
+        total_venta = row[0]
+        prods_vendidos = row[1]
+        metodo_de_pago = row[2]
+        obra_social = row[3]
+        datosLista = [total_venta, prods_vendidos, metodo_de_pago, obra_social]
+        self.cargar_historial(datosLista)
+
+  def cargar_historial(self, datos):
+    contador = 0
+    filasActuales = self.historial_table.rowCount()
+    self.historial_table.insertRow(filasActuales)
+    for dato in datos:
+      self.historial_table.setItem(filasActuales, contador, QTableWidgetItem(dato))
+      contador += 1
 
   def ir_a_menu(self):
     self.hide()
