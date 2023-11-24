@@ -59,79 +59,6 @@ color: &quot;#eee&quot;</string>
        </property>
       </widget>
      </item>
-     <item row="5" column="1">
-      <widget class="QComboBox" name="metodo_pago_cb">
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <pointsize>11</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color:'#222'; 
-color: '#eee'; 
-padding: 8px;
-border-radius: 10px;
-border: 2px solid #eee</string>
-       </property>
-       <item>
-        <property name="text">
-         <string>Efectivo</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Transferencia</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Tarjeta de debito</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Tarjeta de credito</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="title">
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <pointsize>20</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
-       <property name="text">
-        <string>Finalizar Venta:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="obra_social">
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <pointsize>20</pointsize>
-         <underline>false</underline>
-        </font>
-       </property>
-       <property name="text">
-        <string>Obra Social</string>
-       </property>
-      </widget>
-     </item>
      <item row="5" column="0">
       <widget class="QLabel" name="label_2">
        <property name="font">
@@ -192,17 +119,41 @@ padding: 4px</string>
        </property>
       </widget>
      </item>
-     <item row="7" column="1">
-      <widget class="QLabel" name="precio_final_lbl">
+     <item row="5" column="1">
+      <widget class="QComboBox" name="metodo_pago_cb">
        <property name="font">
         <font>
          <family>Arial</family>
-         <pointsize>20</pointsize>
+         <pointsize>11</pointsize>
         </font>
        </property>
-       <property name="text">
-        <string>$</string>
+       <property name="styleSheet">
+        <string notr="true">background-color:'#222'; 
+color: '#eee'; 
+padding: 8px;
+border-radius: 10px;
+border: 2px solid #eee</string>
        </property>
+       <item>
+        <property name="text">
+         <string>Efectivo</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Transferencia</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Tarjeta de debito</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Tarjeta de credito</string>
+        </property>
+       </item>
       </widget>
      </item>
      <item row="8" column="0">
@@ -237,6 +188,55 @@ padding: 4px</string>
        </property>
       </widget>
      </item>
+     <item row="7" column="1">
+      <widget class="QLabel" name="precio_final_lbl">
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>20</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>$</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="title">
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>20</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <property name="text">
+        <string>Finalizar Venta:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="obra_social">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>20</pointsize>
+         <underline>false</underline>
+        </font>
+       </property>
+       <property name="text">
+        <string>Obra Social</string>
+       </property>
+      </widget>
+     </item>
      <item row="2" column="1">
       <widget class="QRadioButton" name="obra_no">
        <property name="font">
@@ -251,6 +251,42 @@ padding: 4px</string>
       </widget>
      </item>
     </layout>
+   </widget>
+   <widget class="QLabel" name="warning_lbl">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>610</y>
+      <width>220</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>220</width>
+      <height>50</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>220</width>
+      <height>50</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>9</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background: transparent; color: yellow;</string>
+    </property>
+    <property name="text">
+     <string>No hay elementos en venta</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

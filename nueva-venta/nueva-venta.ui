@@ -98,76 +98,6 @@ padding: 4px
      <property name="spacing">
       <number>6</number>
      </property>
-     <item row="0" column="1">
-      <widget class="QPushButton" name="eliminar_producto">
-       <property name="minimumSize">
-        <size>
-         <width>220</width>
-         <height>38</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>220</width>
-         <height>34</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <pointsize>15</pointsize>
-        </font>
-       </property>
-       <property name="cursor">
-        <cursorShape>PointingHandCursor</cursorShape>
-       </property>
-       <property name="layoutDirection">
-        <enum>Qt::LeftToRight</enum>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color:#ccd1d1; color: #222; border-radius: 8px;
-padding: 4px;</string>
-       </property>
-       <property name="text">
-        <string>Eliminar producto</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QPushButton" name="realizar_venta">
-       <property name="minimumSize">
-        <size>
-         <width>220</width>
-         <height>38</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>220</width>
-         <height>34</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <pointsize>15</pointsize>
-        </font>
-       </property>
-       <property name="cursor">
-        <cursorShape>PointingHandCursor</cursorShape>
-       </property>
-       <property name="layoutDirection">
-        <enum>Qt::LeftToRight</enum>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color:#ccd1d1; color: #222; border-radius: 8px;
-padding: 4px;</string>
-       </property>
-       <property name="text">
-        <string>Realizar venta</string>
-       </property>
-      </widget>
-     </item>
      <item row="1" column="0">
       <widget class="QPushButton" name="limpiar_venta">
        <property name="minimumSize">
@@ -203,7 +133,7 @@ padding: 4px;</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
+     <item row="0" column="0">
       <widget class="QPushButton" name="agg_producto">
        <property name="minimumSize">
         <size>
@@ -235,6 +165,76 @@ padding: 4px;</string>
        </property>
        <property name="text">
         <string>Agregar Producto</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QPushButton" name="eliminar_producto">
+       <property name="minimumSize">
+        <size>
+         <width>220</width>
+         <height>38</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>220</width>
+         <height>34</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>15</pointsize>
+        </font>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:#ccd1d1; color: #222; border-radius: 8px;
+padding: 4px;</string>
+       </property>
+       <property name="text">
+        <string>Eliminar producto</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QPushButton" name="realizar_venta">
+       <property name="minimumSize">
+        <size>
+         <width>220</width>
+         <height>38</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>220</width>
+         <height>34</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>15</pointsize>
+        </font>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:#ccd1d1; color: #222; border-radius: 8px;
+padding: 4px;</string>
+       </property>
+       <property name="text">
+        <string>Realizar venta</string>
        </property>
       </widget>
      </item>
@@ -284,6 +284,42 @@ padding: 4px;</string>
     </property>
     <property name="text">
      <string>Total: $0</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="warning_lbl">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>640</y>
+      <width>210</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>210</width>
+      <height>50</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>210</width>
+      <height>50</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>9</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background: transparent; color: yellow;</string>
+    </property>
+    <property name="text">
+     <string>Ninguna fila seleccionada</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>

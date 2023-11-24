@@ -76,6 +76,7 @@ class MenuVentana(QMainWindow):
     login_win.error.setVisible(False)
     self.hide()
 
+
 # ------------------Ventana Nueva Venta------------------
 class NuevaVentaVentana(QMainWindow):
   def __init__(self):
@@ -87,9 +88,48 @@ class NuevaVentaVentana(QMainWindow):
     self.total = 0
     self.ventas_table.setColumnCount(4)
     self.ventas_table.setHorizontalHeaderLabels(('Producto', 'Categoria', 'Precio', 'Cantidad Disponible'))
+    self.limpiar_venta.clicked.connect(self.limpiar_venta_clicked)
+    self.eliminar_producto.clicked.connect(self.eliminar_producto_clicked)
+    self.warning_lbl.setVisible(False)
+
+  def eliminar_producto_clicked(self):
+    elementos_seleccionados = self.ventas_table.selectedItems()
+
+    if elementos_seleccionados:
+      self.warning_lbl.setVisible(False)
+      # Obtener la fila de un elemento seleccionado (asumiendo que es una selección por fila)
+      fila_seleccionada = elementos_seleccionados[0].row()
+      print(fila_seleccionada)
+      # Crear cartel de advertencia
+      self.quitar_confirmacion = QMessageBox()
+      self.quitar_confirmacion.setIcon(QMessageBox.Icon.Warning)
+      buttons = (QMessageBox.StandardButton.No)
+      buttons |= QMessageBox.StandardButton.Yes
+      self.quitar_confirmacion.setStandardButtons(buttons)
+      self.quitar_confirmacion.setWindowTitle("Eliminar Producto")
+      self.quitar_confirmacion.setText("¿Desea eliminar por completo el producto?")
+      self.quitar_confirmacion.exec()
+
+      if self.quitar_confirmacion.clickedButton().text() == '&Yes':
+          # Eliminar la fila seleccionada
+          item = self.ventas_table.item(fila_seleccionada, 2)
+          self.total = self.total - int(item.text())
+          self.total_venta_lbl.setText(f"Total: ${self.total}")
+          self.ventas_table.removeRow(fila_seleccionada)
+    else:
+      # Crear la advertencia de ningun elemento seleccionado.
+      self.warning_lbl.setVisible(True)
+      
+
+
+  def limpiar_venta_clicked(self):
+    self.ventas_table.setRowCount(0)
+    self.total = 0
+    self.total_venta_lbl.setText(f"Total: ${self.total}")
+    finalizar_venta_win.hide()
 
   def ir_a_realizar_venta(self):
-    finalizar_venta_win.precio_final_lbl.setText(f"${self.total}")
+    finalizar_venta_win.precio_final_lbl.setText(f"{self.total}")
     self.hide()
     finalizar_venta_win.show()
 
@@ -108,10 +148,44 @@ class FinalizarVentaVentana(QMainWindow):
     uic.loadUi('nueva-venta/realizar-venta-ventana.ui', self)
     self.cancelar_vta_btn.clicked.connect(self.cancelar_venta)
     self.realizar_vta_btn.clicked.connect(self.realizar_venta)
+    self.descuentoAplicado = False
+    self.calcular_precio()
+    self.obra_si.toggled.connect(self.calcular_precio)
+    self.descuento = 0
+    self.warning_lbl.setVisible(False)
+
+  def calcular_precio(self):
+    if self.obra_si.isChecked():
+      self.descuento = nueva_venta_win.total * 0.1
+      nueva_venta_win.total = nueva_venta_win.total * 0.9 #Descuento del 10%
+      self.precio_final_lbl.setText(f"{nueva_venta_win.total}")
+      self.descuentoAplicado = True
+    else:
+      if self.descuentoAplicado: 
+        nueva_venta_win.total = nueva_venta_win.total + self.descuento
+        self.precio_final_lbl.setText(f"{nueva_venta_win.total}")
 
   def realizar_venta(self):
-    nueva_venta_win.show()
-    self.hide()
+    if float(nueva_venta_win.total) <= 0:
+      self.warning_lbl.setVisible(True)
+    else: 
+      total = float(self.precio_final_lbl.text())
+      prods_vendidos = nueva_venta_win.ventas_table.rowCount()
+      if self.descuentoAplicado:
+        con_descuento = 'Si'
+      else:
+        con_descuento = 'No'
+      
+      metodo_de_pago = self.metodo_pago_cb.currentText()
+
+      detalles_de_venta = [total, prods_vendidos, metodo_de_pago, con_descuento]
+
+      df = pd.DataFrame([detalles_de_venta])
+      # Guardar el DataFrame en el archivo CSV, sobrescribiendo completamente el archivo
+      df.to_csv('historial/historial.csv', index=False, header=False, sep='|')
+      
+      nueva_venta_win.show()
+      nueva_venta_win.limpiar_venta_clicked()
 
   def cancelar_venta(self):
     nueva_venta_win.show()
@@ -145,7 +219,7 @@ class AgregarProductoVentana(QMainWindow):
       for row in reader:
         if elemento_texto == row[0]:
           detalles_elemento = [row[0],row[1],row[2],row[3]]
-          nueva_venta_win.total = nueva_venta_win.total + int(row[2])
+          nueva_venta_win.total = int(nueva_venta_win.total) + int(row[2])
           nueva_venta_win.total_venta_lbl.setText(f"Total: ${nueva_venta_win.total}")
 
     contador = 0
@@ -160,6 +234,10 @@ class AgregarProductoVentana(QMainWindow):
   def cancelar(self):
     self.products_cbx.setCurrentIndex(0)
     self.hide()
+
+
+
+
 
 
 # ------------------Ventana Recetas------------------
@@ -308,7 +386,7 @@ class InventarioVentana(QMainWindow):
   def __init__(self):
     super().__init__()
     uic.loadUi('./inventario/inventario-ventana.ui',self)
-    self.volver_menu_btn.clicked.connect(self.go_to_menu)
+    self.volver_menu_btn.clicked.connect(self.ir_a_menu_y_cargar_csv)
     # Config de la tabla
     self.inventario_table.setRowCount(0)
     self.inventario_table.setColumnCount(4)
@@ -356,6 +434,7 @@ class InventarioVentana(QMainWindow):
     agregar_stock_win.show()
 
   def showEvent(self, event):
+    self.inventario_table.setRowCount(0)
     # Este método se llama cuando la ventana se muestra
     super(InventarioVentana, self).showEvent(event)
     with open('inventario/inventario.csv', encoding='utf-8') as f:
@@ -376,7 +455,21 @@ class InventarioVentana(QMainWindow):
       self.inventario_table.setItem(filasActuales, contador, QTableWidgetItem(dato))
       contador += 1
 
-  def go_to_menu(self):
+  def ir_a_menu_y_cargar_csv(self):
+
+    datos_inventario = []
+
+    for row in range(self.inventario_table.rowCount()):
+      fila = []
+      for column in range(self.inventario_table.columnCount()):
+        item = self.inventario_table.item(row, column)
+        fila.append(item.text() if item is not None else "")
+      datos_inventario.append(fila)
+
+    df = pd.DataFrame(datos_inventario)
+    # Guardar el DataFrame en el archivo CSV, sobrescribiendo completamente el archivo
+    df.to_csv('inventario/inventario.csv', index=False, header=False, sep='|')
+
     self.hide()
     menu_win.show()
     
