@@ -13,7 +13,6 @@ import csv
 #   Recetas: 
 #     Subir de la tabla al csvs los datos
 
-
 # ------------------LogIn------------------
 class LoginVentana(QMainWindow):
   def __init__(self):
@@ -117,7 +116,7 @@ class RecetasVentana(QMainWindow):
   def __init__(self):
     super(RecetasVentana, self).__init__()
     uic.loadUi('./recetas/recetas-ventana.ui', self)
-    self.volver_menu_btn.clicked.connect(self.volver_menu)
+    self.volver_menu_btn.clicked.connect(self.volver_menu_y_cargar_csv)
     self.gotoagg_btn.clicked.connect(self.go_to_agg)
     self.quitar_btn.clicked.connect(self.quitar_fila_clicked)
     self.warning_lbl.setVisible(False)
@@ -147,13 +146,6 @@ class RecetasVentana(QMainWindow):
         self.cargar_receta(datosLista)
 
     agregar_receta_win.error_lbl.setVisible(False)
-
-  def cargar_row_in_csv(self, dato):
-    self.datos_a_cargar.append(dato)
-
-    with open('recetas/recetas.csv', 'w') as file:
-      writer = csv.writer(file, delimiter='|')
-      writer.writerow(dato)
 
   def quitar_fila_clicked(self):
     elementos_seleccionados = self.recetas_table.selectedItems()
@@ -185,7 +177,9 @@ class RecetasVentana(QMainWindow):
   def go_to_agg(self):
     agregar_receta_win.show()
 
-  def volver_menu(self):
+  def volver_menu_y_cargar_csv(self):
+
+
     self.hide()
     menu_win.show()
 
@@ -241,7 +235,6 @@ class AgregarRecetaWidget(QWidget):
     
     if contador == 6:
       receta_win.cargar_receta(datosLista)
-      receta_win.cargar_row_in_csv(datosLista)
       self.error_lbl.setVisible(False)
     else:
       self.error_lbl.setVisible(True)
