@@ -11,8 +11,6 @@ import pandas as pd
 #   Nueva Venta:
 #     Leer csvs y ponerlos en la tabla
 #     Añadir función a los botones
-#   Recetas: 
-#     Subir de la tabla al csvs los datos
 
 # ------------------LogIn------------------
 class LoginVentana(QMainWindow):
@@ -78,7 +76,6 @@ class MenuVentana(QMainWindow):
     login_win.error.setVisible(False)
     self.hide()
 
-
 # ------------------Ventana Nueva Venta------------------
 class NuevaVentaVentana(QMainWindow):
   def __init__(self):
@@ -88,6 +85,8 @@ class NuevaVentaVentana(QMainWindow):
     self.agg_producto.clicked.connect(self.ir_a_agg_prod)
     self.realizar_venta.clicked.connect(self.ir_a_realizar_venta)
     self.total = 0
+    self.ventas_table.setColumnCount(4)
+    self.ventas_table.setHorizontalHeaderLabels(('Producto', 'Categoria', 'Precio', 'Cantidad Disponible'))
 
   def ir_a_realizar_venta(self):
     finalizar_venta_win.precio_final_lbl.setText(f"${self.total}")
@@ -102,24 +101,7 @@ class NuevaVentaVentana(QMainWindow):
     self.hide()
     menu_win.show()
     
-# ||--------Agg Producto a Venta--------||
-class AgregarProductoVentana(QMainWindow):
-  def __init__(self):
-    super().__init__()
-    uic.loadUi('nueva-venta/agregar-producto.ui', self)
-    self.cancelar_btn.clicked.connect(self.cancelar_add_product)
-    self.agregar_btn.clicked.connect(self.realizar_venta)
-    self.products_cbx.setCurrentIndex(0)
-
-  def realizar_venta(self):
-    elemento_texto = self.products_cbx.currentText()
-    elemento_index = self.products_cbx.currentIndex()
-    print(elemento_texto)
-    print(elemento_index)
-
-  def cancelar_add_product(self):
-    self.hide()
-
+#||--------Finalizar Venta--------||
 class FinalizarVentaVentana(QMainWindow):
   def __init__(self):
     super().__init__()
@@ -134,6 +116,51 @@ class FinalizarVentaVentana(QMainWindow):
   def cancelar_venta(self):
     nueva_venta_win.show()
     self.hide()
+
+
+# ||--------Agg Producto a Venta--------||
+class AgregarProductoVentana(QMainWindow):
+  def __init__(self):
+    super().__init__()
+    uic.loadUi('nueva-venta/agregar-producto.ui', self)
+    self.cancelar_btn.clicked.connect(self.cancelar)
+    self.agregar_btn.clicked.connect(self.agregar_producto)
+    self.products_cbx.clear()
+    self.cargar_cbx()
+
+  def cargar_cbx(self):
+    lista = []
+    with open('inventario/inventario.csv', 'r', encoding='utf-8') as f:
+      reader = csv.reader(f, delimiter="|")
+      for row in reader:
+        producto = row[0]
+        lista.append(producto)
+    self.products_cbx.addItems(sorted(lista))
+
+
+  def agregar_producto(self):
+    elemento_texto = self.products_cbx.currentText()
+    with open('inventario/inventario.csv', 'r', encoding='utf-8') as f:
+      reader = csv.reader(f, delimiter="|")
+      for row in reader:
+        if elemento_texto == row[0]:
+          detalles_elemento = [row[0],row[1],row[2],row[3]]
+          nueva_venta_win.total = nueva_venta_win.total + int(row[2])
+          nueva_venta_win.total_venta_lbl.setText(f"Total: ${nueva_venta_win.total}")
+
+    contador = 0
+    filasActuales = nueva_venta_win.ventas_table.rowCount()
+    nueva_venta_win.ventas_table.insertRow(filasActuales)
+    for dato in detalles_elemento:
+      nueva_venta_win.ventas_table.setItem(filasActuales, contador, QTableWidgetItem(dato))
+      contador += 1
+    
+    self.hide()
+
+  def cancelar(self):
+    self.products_cbx.setCurrentIndex(0)
+    self.hide()
+
 
 # ------------------Ventana Recetas------------------
 class RecetasVentana(QMainWindow):

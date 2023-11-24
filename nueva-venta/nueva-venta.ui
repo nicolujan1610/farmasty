@@ -246,8 +246,14 @@ padding: 4px;</string>
       <x>10</x>
       <y>50</y>
       <width>881</width>
-      <height>491</height>
+      <height>441</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+     </font>
     </property>
     <property name="styleSheet">
      <string notr="true">color:#000; background: #fff;</string>
@@ -256,8 +262,32 @@ padding: 4px;</string>
      <bool>false</bool>
     </property>
     <attribute name="horizontalHeaderDefaultSectionSize">
-     <number>219</number>
+     <number>200</number>
     </attribute>
+   </widget>
+   <widget class="QLabel" name="total_venta_lbl">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>500</y>
+      <width>261</width>
+      <height>49</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>15</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Total: $0</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
