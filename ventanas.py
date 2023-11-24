@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import QMainWindow, QApplication, QWidget, QTableWidgetItem, QMessageBox,QAbstractItemView
 from PyQt6 import uic
 import csv
+import pandas as pd
 
 # ToDos:
 #   Inventario casi listo, por no decir listo...
@@ -77,19 +78,27 @@ class MenuVentana(QMainWindow):
     login_win.error.setVisible(False)
     self.hide()
 
+
 # ------------------Ventana Nueva Venta------------------
 class NuevaVentaVentana(QMainWindow):
   def __init__(self):
     super().__init__()
     uic.loadUi('nueva-venta/nueva-venta.ui', self)
-    self.menu_btn.clicked.connect(self.go_to_menu)
-    self.agg_producto.clicked.connect(self.go_to_add_product)
+    self.menu_btn.clicked.connect(self.ir_a_menu)
+    self.agg_producto.clicked.connect(self.ir_a_agg_prod)
+    self.realizar_venta.clicked.connect(self.ir_a_realizar_venta)
+    self.total = 0
 
-  def go_to_add_product(self):
+  def ir_a_realizar_venta(self):
+    finalizar_venta_win.precio_final_lbl.setText(f"${self.total}")
+    self.hide()
+    finalizar_venta_win.show()
+
+  def ir_a_agg_prod(self):
     agregar_producto_win.products_cbx.setCurrentIndex(0)
     agregar_producto_win.show()
 
-  def go_to_menu(self):
+  def ir_a_menu(self):
     self.hide()
     menu_win.show()
     
@@ -111,6 +120,21 @@ class AgregarProductoVentana(QMainWindow):
   def cancelar_add_product(self):
     self.hide()
 
+class FinalizarVentaVentana(QMainWindow):
+  def __init__(self):
+    super().__init__()
+    uic.loadUi('nueva-venta/realizar-venta-ventana.ui', self)
+    self.cancelar_vta_btn.clicked.connect(self.cancelar_venta)
+    self.realizar_vta_btn.clicked.connect(self.realizar_venta)
+
+  def realizar_venta(self):
+    nueva_venta_win.show()
+    self.hide()
+
+  def cancelar_venta(self):
+    nueva_venta_win.show()
+    self.hide()
+
 # ------------------Ventana Recetas------------------
 class RecetasVentana(QMainWindow):
   def __init__(self):
@@ -123,7 +147,6 @@ class RecetasVentana(QMainWindow):
 
     self.datos_a_cargar = []
     # Config de la tabla
-    self.recetas_table.setRowCount(0)
     self.recetas_table.setColumnCount(6)
     self.recetas_table.setHorizontalHeaderLabels(('Paciente', 'Emisión', 'Medicamento', 'Cantidad', 'Diagnostico', 'Doctor'))
 
@@ -133,6 +156,8 @@ class RecetasVentana(QMainWindow):
     self.completar_tabla_csv()
     
   def completar_tabla_csv(self):
+    self.recetas_table.setRowCount(0)
+
     with open('recetas/recetas.csv', 'r') as f:
       reader = csv.reader(f, delimiter="|")
       for row in reader:
@@ -178,7 +203,18 @@ class RecetasVentana(QMainWindow):
     agregar_receta_win.show()
 
   def volver_menu_y_cargar_csv(self):
+    datos_inventario = []
 
+    for row in range(self.recetas_table.rowCount()):
+        fila = []
+        for column in range(self.recetas_table.columnCount()):
+            item = self.recetas_table.item(row, column)
+            fila.append(item.text() if item is not None else "")
+        datos_inventario.append(fila)
+
+    df = pd.DataFrame(datos_inventario)
+    # Guardar el DataFrame en el archivo CSV, sobrescribiendo completamente el archivo
+    df.to_csv('recetas/recetas.csv', index=False, header=False, sep='|')
 
     self.hide()
     menu_win.show()
@@ -238,6 +274,7 @@ class AgregarRecetaWidget(QWidget):
       self.error_lbl.setVisible(False)
     else:
       self.error_lbl.setVisible(True)
+
 
 # ------------------Ventana Inventario------------------
 class InventarioVentana(QMainWindow):
@@ -343,6 +380,8 @@ class AgregarStockVentana(QWidget):
     else:
       self.error_lbl.setVisible(True)
     
+
+
 # ------------------Ventana Historial------------------
 class HistorialVentasVentana(QMainWindow):
   def __init__(self):
@@ -364,6 +403,7 @@ agregar_producto_win = AgregarProductoVentana()
 inventario_win = InventarioVentana()
 agregar_stock_win = AgregarStockVentana()
 historial_win = HistorialVentasVentana()
+finalizar_venta_win = FinalizarVentaVentana()
 
 login_win.show()
 app.exec()
