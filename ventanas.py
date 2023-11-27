@@ -3,15 +3,6 @@ from PyQt6 import uic
 import csv
 import pandas as pd
 
-# ToDos:
-#   Inventario casi listo, por no decir listo...
-#   Historial De Ventas:
-#     Leer csvs y ponerlos en la tabla
-#     Añadir función a los botones
-#   Nueva Venta:
-#     Leer csvs y ponerlos en la tabla
-#     Añadir función a los botones
-
 # ------------------LogIn------------------
 class LoginVentana(QMainWindow):
   def __init__(self):
@@ -152,19 +143,21 @@ class FinalizarVentaVentana(QMainWindow):
     self.descuentoAplicado = False
     self.calcular_precio()
     self.obra_si.toggled.connect(self.calcular_precio)
-    self.descuento = 0
+    self.precioSinDescuento = 0
+    self.descuentoAplicado = 0
     self.warning_lbl.setVisible(False)
 
   def calcular_precio(self):
-    if self.obra_si.isChecked():
-      self.descuento = nueva_venta_win.total * 0.1
-      nueva_venta_win.total = nueva_venta_win.total * 0.9 #Descuento del 10%
-      self.precio_final_lbl.setText(f"{nueva_venta_win.total}")
+    if self.obra_si.isChecked() and self.descuentoAplicado == False:
+      self.precioSinDescuento = nueva_venta_win.total
+      self.descuentoAplicado = nueva_venta_win.total * 0.9 #Descuento del 10%
+      self.precio_final_lbl.setText(f"{self.descuentoAplicado}")
       self.descuentoAplicado = True
     else:
       if self.descuentoAplicado: 
-        nueva_venta_win.total = nueva_venta_win.total + self.descuento
+        nueva_venta_win.total = self.precioSinDescuento 
         self.precio_final_lbl.setText(f"{nueva_venta_win.total}")
+        self.descuentoAplicado = False
 
   def realizar_venta(self):
     if float(nueva_venta_win.total) <= 0:
@@ -176,7 +169,7 @@ class FinalizarVentaVentana(QMainWindow):
         con_descuento = 'Si'
       else:
         con_descuento = 'No'
-      
+
       metodo_de_pago = self.metodo_pago_cb.currentText()
       detalles_de_venta_actual = [total, prods_vendidos, metodo_de_pago, con_descuento]
       lista_completa = [detalles_de_venta_actual]
@@ -191,17 +184,21 @@ class FinalizarVentaVentana(QMainWindow):
           datosLista = [total_venta, prods_vendidos, metodo_de_pago, obra_social]
           lista_completa.append(datosLista)
         
-      df = pd.DataFrame(lista_completa)
       # Guardar el DataFrame en el archivo CSV, sobrescribiendo completamente el archivo
+      df = pd.DataFrame(lista_completa)
       df.to_csv('historial/historial.csv', index=False, header=False, sep='|')
       
+      self.descuentoAplicado = 0
       nueva_venta_win.show()
       nueva_venta_win.limpiar_venta_clicked()
 
   def cancelar_venta(self):
+    self.obra_si.setChecked(False)
+    self.descuentoAplicado = 0
+    self.precio_final_lbl.setText(f"{nueva_venta_win.total}")
+
     nueva_venta_win.show()
     self.hide()
-
 
 # ||--------Agg Producto a Venta--------||
 class AgregarProductoVentana(QMainWindow):
@@ -245,10 +242,6 @@ class AgregarProductoVentana(QMainWindow):
   def cancelar(self):
     self.products_cbx.setCurrentIndex(0)
     self.hide()
-
-
-
-
 
 
 # ------------------Ventana Recetas------------------
@@ -510,7 +503,6 @@ class AgregarStockVentana(QWidget):
       self.error_lbl.setVisible(False)
     else:
       self.error_lbl.setVisible(True)
-    
 
 
 # ------------------Ventana Historial------------------
