@@ -137,6 +137,9 @@ padding: 4px</string>
     <property name="styleSheet">
      <string notr="true">background-color: #fff; color: #222</string>
     </property>
+    <property name="editTriggers">
+     <set>QAbstractItemView::NoEditTriggers</set>
+    </property>
     <attribute name="horizontalHeaderDefaultSectionSize">
      <number>200</number>
     </attribute>

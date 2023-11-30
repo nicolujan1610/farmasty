@@ -97,7 +97,7 @@ border-radius: 16px;</string>
         <bool>false</bool>
        </property>
        <property name="placeholderText">
-        <string>Username</string>
+        <string>Username or email</string>
        </property>
       </widget>
      </item>
@@ -229,6 +229,46 @@ color:&quot;#222&quot;</string>
     </property>
     <property name="wordWrap">
      <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="register_btn">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>560</y>
+      <width>200</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>200</width>
+      <height>25</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>200</width>
+      <height>25</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <underline>true</underline>
+     </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-radius: 16px;
+padding:4px;
+background-color: transparent;
+color:&quot;#eee&quot;;
+text-decoration:underline;</string>
+    </property>
+    <property name="text">
+     <string>No tienes cuenta? Crea una aquí</string>
     </property>
    </widget>
   </widget>

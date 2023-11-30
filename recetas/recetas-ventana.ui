@@ -99,6 +99,9 @@
     <property name="styleSheet">
      <string notr="true">color:#000; background: #fff;</string>
     </property>
+    <property name="editTriggers">
+     <set>QAbstractItemView::NoEditTriggers</set>
+    </property>
     <property name="showGrid">
      <bool>true</bool>
     </property>
