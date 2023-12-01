@@ -209,7 +209,7 @@ border: 2px solid #eee</string>
     </item>
    </layout>
   </widget>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="title">
    <property name="geometry">
     <rect>
      <x>160</x>

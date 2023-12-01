@@ -202,7 +202,38 @@
         <string notr="true">background-color:#ccd1d1; color: #222; border-radius: 8px</string>
        </property>
        <property name="text">
-        <string>Agregar Stock</string>
+        <string>Agregar Producto</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="edit_btn">
+       <property name="minimumSize">
+        <size>
+         <width>230</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>230</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>13</pointsize>
+        </font>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:#ccd1d1; color: #222; border-radius: 8px</string>
+       </property>
+       <property name="text">
+        <string>Editar producto</string>
        </property>
       </widget>
      </item>
@@ -239,11 +270,47 @@
      </item>
     </layout>
    </widget>
-   <widget class="QLabel" name="warning_lbl">
+   <widget class="QLabel" name="edit_warning_lbl">
     <property name="geometry">
      <rect>
-      <x>520</x>
-      <y>630</y>
+      <x>330</x>
+      <y>550</y>
+      <width>240</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>240</width>
+      <height>50</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>240</width>
+      <height>50</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>9</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background: transparent; color: yellow;</string>
+    </property>
+    <property name="text">
+     <string>Ninguna fila seleccionada</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="del_warning_lbl">
+    <property name="geometry">
+     <rect>
+      <x>610</x>
+      <y>550</y>
       <width>240</width>
       <height>50</height>
      </rect>

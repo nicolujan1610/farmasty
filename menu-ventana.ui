@@ -230,16 +230,15 @@ color:&quot;#222&quot;</string>
     <property name="title">
      <string>Ajustes</string>
     </property>
-    <addaction name="action_cambiar_contrasena"/>
+    <addaction name="action_perfil_usuario"/>
     <addaction name="action_cerrar_sesion"/>
-    <addaction name="action_reportar_problema"/>
    </widget>
    <widget class="QMenu" name="menuAyuda">
     <property name="title">
      <string>Ayuda</string>
     </property>
-    <addaction name="actionContacto"/>
-    <addaction name="actionPagina_web"/>
+    <addaction name="action_contacto"/>
+    <addaction name="action_reportar_problema"/>
    </widget>
    <addaction name="menuAjustext"/>
    <addaction name="menuAyuda"/>
@@ -255,7 +254,7 @@ color:&quot;#222&quot;</string>
     <string>Reportar Problema</string>
    </property>
   </action>
-  <action name="action_cambiar_contrasena">
+  <action name="action_perfil_usuario">
    <property name="text">
     <string>Perfil de usuario</string>
    </property>
@@ -265,7 +264,7 @@ color:&quot;#222&quot;</string>
     <string>Ayuda</string>
    </property>
   </action>
-  <action name="actionContacto">
+  <action name="action_contacto">
    <property name="text">
     <string>Contacto</string>
    </property>
